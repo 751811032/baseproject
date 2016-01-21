@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="playerbean">    
+    <sql id="selectId">
+        playerID,
+        sportsDataID,
+        active,
+        teamID,
+        team,
+        jersey,        
+        positionCategory,  
+        position,  
+        firstName,
+        lastName,
+        height,
+        weight,
+        birthDate,
+        birthCity,
+        birthState,
+        birthCountry,
+        highSchool,
+        college,
+        salary,
+        photoUrl,
+        experience
+   </sql>   
+ 
+    <insert id="add" parameterType="PlayerBean"  >
+        insert into Player ( 
+        playerID,
+        sportsDataID,
+        active,
+        teamID,
+        team,
+        jersey,        
+        positionCategory,  
+        position,  
+        firstName,
+        lastName,
+        height,
+        weight,
+        birthDate,
+        birthCity,
+        birthState,
+        birthCountry,
+        highSchool,
+        college,
+        salary,
+        photoUrl,
+        experience)        
+        values (#{playerID},#{sportsDataID,jdbcType=NUMERIC},#{active},#{teamID,jdbcType=NUMERIC},#{team,jdbcType=VARCHAR},#{jersey,jdbcType=NUMERIC},#{positionCategory},#{position},#{firstName},#{lastName},
+            #{height},#{weight},#{birthDate,jdbcType=VARCHAR},#{birthCity,jdbcType=VARCHAR},#{birthState,jdbcType=VARCHAR},#{birthCountry,jdbcType=VARCHAR},#{highSchool,jdbcType=VARCHAR},#{college,jdbcType=VARCHAR},#{salary,jdbcType=NUMERIC},#{photoUrl,jdbcType=VARCHAR},#{experience,jdbcType=NUMERIC})
+    </insert>
+    <!-- 根据id查询球员 -->
+    <select id="getById" parameterType="Long" resultType="PlayerBean" >
+        select
+        <include refid="selectId" />
+        from  Player  where playerID=#{playerID}
+    </select>
+  
+  <!-- 列出所有球员 -->
+    <select id="getAllPlayer" resultType="PlayerBean" >
+        select
+        <include refid="selectId" />
+        from  Player
+    </select>
+    <!-- 列出某个球队的所有球员 -->
+    <select id="getPlayerByTeamId" parameterType="Long" resultType="PlayerBean" >
+        select
+        <include refid="selectId" />
+        from  Player where teamId = #{teamId}
+    </select>
+    <!-- 列出某个球队的所有球员 -->
+    <select id="getPlayerByTeam" parameterType="String" resultType="PlayerBean" >
+        select
+        <include refid="selectId" />
+        from  Player where team = #{team}
+    </select>
+</mapper>

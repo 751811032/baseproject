@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="standingbean">    
+    <sql id="selectId">
+       season,
+       seasonType,
+       teamID,
+       key,
+       city,
+       name,
+       conference,
+       division,
+       wins,
+       losses,
+       percentage,
+       conferenceWins,
+       conferenceLosses,
+       divisionWins,
+       divisionLosses
+    </sql>   
+    
+ 
+    <insert id="add" parameterType="StandingBean"  >
+        insert into Standing ( 
+        season,
+       seasonType,
+       teamID,
+       key,
+       city,
+       name,
+       conference,
+       division,
+       wins,
+       losses,
+       percentage,
+       conferenceWins,
+       conferenceLosses,
+       divisionWins,
+       divisionLosses)        
+        values (#{season},#{seasonType},#{teamID},#{key},#{city},#{name},#{conference},#{division},#{wins},#{losses},
+            #{percentage},#{conferenceWins},#{conferenceLosses},#{divisionWins},#{divisionLosses})
+    </insert>
+    <!-- 根据id查询队伍 -->
+    <select id="getById" parameterType="Long" resultType="StandingBean" >
+        select
+        <include refid="selectId" />
+        from  Standing  where teamId=#{teamId}
+    </select>
+  <!-- 列出所有排行 -->
+    <select id="getAllStanding" resultType="StandingBean" >
+        select
+        <include refid="selectId" />
+        from  Standing
+    </select>
+    <!-- 列出所有东部排行 -->
+    <select id="getEastStanding" resultType="StandingBean" >
+        select
+        <include refid="selectId" />
+        from  Standing where conference = 'Eastern'
+    </select>
+    <!-- 列出所有西部排行 -->
+    <select id="getWestStanding" resultType="StandingBean" >
+        select
+        <include refid="selectId" />
+        from  Standing where conference = 'Western'
+    </select>
+</mapper>

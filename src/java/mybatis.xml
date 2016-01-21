@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <!-- 给实体Bean一个别名-->
+        <!--        <typeAlias type="com.ct855.entity.User" alias="User" />
+        <typeAlias type="com.ct855.entity.UserLoginList" alias="UserLoginList" />
+        <typeAlias type="com.ct855.entity.Resources" alias="Resources"/>
+        <typeAlias type="com.ct855.entity.Roles" alias="Roles"/>
+        <typeAlias type="com.ct855.entity.ResourceRoles" alias="ResourceRoles"/>
+        <typeAlias type="com.ct855.entity.UserRoles" alias="UserRoles"/>
+        <typeAlias type="com.ct855.entity.ServerInfo" alias="ServerInfo"/>		
+        <typeAlias type="com.ct855.entity.Log" alias="Log"/>
+        <typeAlias type="com.ct855.entity.Announcement" alias="Announcement"/>
+        <typeAlias type="com.ct855.entity.Currency" alias="Currency"/>
+        <typeAlias type="com.ct855.entity.GameType" alias="GameType"/>
+        <typeAlias type="com.ct855.entity.Wordtype" alias="Wordtype"/>
+        <typeAlias type="com.ct855.entity.Wordbook" alias="Wordbook"/>
+        <typeAlias type="com.ct855.entity.Bankinfo" alias="Bankinfo"/>
+        <typeAlias type="com.ct855.entity.Member" alias="Member"/>
+        <typeAlias type="com.ct855.entity.CashLevel" alias="CashLevel"/>
+        <typeAlias type="com.ct855.entity.CashLevelSetting" alias="CashLevelSetting"/>
+        <typeAlias type="com.ct855.entity.CashSetting" alias="CashSetting"/>
+        <typeAlias type="com.ct855.entity.CashLog" alias="CashLog"/>
+        <typeAlias type="com.ct855.entity.MemberLevel" alias="MemberLevel"/>
+        <typeAlias type="com.ct855.entity.GameLimit" alias="GameLimit"/>
+         <typeAlias type="com.ct855.entity.CommissionSetting" alias="CommissionSetting"/>
+        <typeAlias type="com.ct855.entity.Fee" alias="Fee"/>
+        <typeAlias type="com.ct855.entity.Issue" alias="Issue"/>
+        <typeAlias type="com.ct855.entity.CommissionCount" alias="CommissionCount"/>
+        <typeAlias type="com.ct855.entity.Report" alias="Report"/>
+        <typeAlias type="com.ct855.entity.Affiliate" alias="Affiliate"/>
+        <typeAlias type="com.ct855.entity.BetDetail" alias="BetDetail"/>
+        <typeAlias type="com.ct855.entity.McomAffiliate" alias="McomAffiliate"/>-->
+       <package name="com.ct855.entity"/>
+    </typeAliases>
+</configuration>

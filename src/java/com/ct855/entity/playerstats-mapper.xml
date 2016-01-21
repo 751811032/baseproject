@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="playerstatsbean">    
+    <sql id="selectId">
+        statID,
+        teamID,
+        playerID,
+        seasonType,
+        season,
+        name,
+        team,
+        position,   
+        started,
+        Updated,
+        games,                    
+        fantasyPoints,
+        minutes,
+        fieldGoalsMade,             
+        fieldGoalsAttempted,      
+        fieldGoalsPercentage, 
+        effectiveFieldGoalsPercentage,  
+        twoPointersMade,            
+        twoPointersAttempted,    
+        twoPointersPercentage,   
+        threePointersMade,
+        threePointersAttempted,
+        threePointersPercentage,
+        freeThrowsMade,           
+        freeThrowsAttempted,      
+        freeThrowsPercentage,    
+        offensiveRebounds,       
+        defensiveRebounds,       
+        rebounds,                 
+        assists,                   
+        steals,                   
+        blockedShots,           
+        turnovers,               
+        personalFouls,             
+        points,                    
+        trueShootingAttempts,     
+        trueShootingPercentage,  
+        fantasyPointsFanDuel,
+        fantasyPointsDraftKings,
+        fantasyPointsYahoo,
+
+        averagePoint,
+        averageRebounds,
+        averageAssists,
+        averageSteals
+    </sql>   
+ 
+    <insert id="add" parameterType="PlayerStatsBean"  >
+        insert into PlayerStats ( 
+        statID,
+        teamID,
+        playerID,
+        seasonType,
+        season,
+        name,
+        team,
+        position,   
+        started,
+        Updated,
+        games,                    
+        fantasyPoints,
+        minutes,
+        fieldGoalsMade,             
+        fieldGoalsAttempted,      
+        fieldGoalsPercentage, 
+        effectiveFieldGoalsPercentage,  
+        twoPointersMade,            
+        twoPointersAttempted,    
+        twoPointersPercentage,   
+        threePointersMade,
+        threePointersAttempted,
+        threePointersPercentage,
+        freeThrowsMade,           
+        freeThrowsAttempted,      
+        freeThrowsPercentage,    
+        offensiveRebounds,       
+        defensiveRebounds,       
+        rebounds,                 
+        assists,                   
+        steals,                   
+        blockedShots,           
+        turnovers,               
+        personalFouls,             
+        points,                    
+        trueShootingAttempts,     
+        trueShootingPercentage,  
+        fantasyPointsFanDuel,
+        fantasyPointsDraftKings,
+        fantasyPointsYahoo,
+
+        averagePoint,
+        averageRebounds,
+        averageAssists,
+        averageSteals)        
+        values (#{statID},#{teamID},#{playerID},#{seasonType},#{season},#{name},#{team},#{position},#{started},
+        #{Updated},#{games},#{fantasyPoints},#{minutes},#{fieldGoalsMade},#{fieldGoalsAttempted},#{fieldGoalsPercentage},#{effectiveFieldGoalsPercentage},#{twoPointersMade},#{twoPointersAttempted},       
+        #{twoPointersPercentage},#{threePointersMade},#{threePointersAttempted},#{threePointersPercentage},#{freeThrowsMade},#{freeThrowsAttempted},#{freeThrowsPercentage},#{offensiveRebounds},
+        #{defensiveRebounds},#{rebounds},#{assists},#{steals},#{blockedShots},#{turnovers,},#{personalFouls},#{points},#{trueShootingAttempts},#{trueShootingPercentage},#{fantasyPointsFanDuel,},
+        #{fantasyPointsDraftKings},#{fantasyPointsYahoo},#{averagePoint},#{averageRebounds},#{averageAssists},#{averageSteals})
+    </insert>
+    
+    <!-- 根据id查询队伍 -->
+    <select id="getById" parameterType="Long" resultType="PlayerStatsBean" >
+        select
+        <include refid="selectId" />
+        from  PlayerStats  where statID=#{statID}
+    </select>
+    <!-- 根据查询 -->
+    <select id="getAllPlayerStats" resultType="PlayerStatsBean" >
+        select
+        <include refid="selectId" />
+        from  PlayerStats
+    </select>
+    <!-- 根据平均分查询 -->
+    <select id="getPointOrder" resultType="PlayerStatsBean" >
+        select * from 
+            (select * from PLAYERSTATS order by averagePoint desc )
+                where rownum &lt; 26
+    </select>
+  <!-- 根据平均篮板查询 -->
+    <select id="getReboundsOrder" resultType="PlayerStatsBean" >
+        select * from 
+            (select * from PLAYERSTATS order by averageRebounds desc )
+                where rownum &lt; 26
+    </select>
+    <!-- 根据平均助攻查询 -->
+    <select id="getAssistsOrder" resultType="PlayerStatsBean" >
+        select * from 
+            (select * from PLAYERSTATS order by averageAssists desc )
+                where rownum &lt; 26
+    </select>
+</mapper>

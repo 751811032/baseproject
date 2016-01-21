@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member">    
+    <sql id="selectId">
+        memberid ,
+        account,
+        points,
+        nickname,
+        lotteryrate,
+        locatelotteryrate,
+        shiyixuanwufanshui,
+        kuaile8fanshui,
+        fucaifanshui,
+        password
+    </sql>   
+   
+
+    <insert id="add" parameterType="Member" keyProperty="id" statementType="STATEMENT">
+        <selectKey resultType="long" keyProperty="memberid" order="BEFORE">  
+            SELECT SEQ_MEMBER_ID.NEXTVAL FROM DUAL  
+        </selectKey> 
+        insert into WL_MEMBER_${webname} ( 
+        memberid,
+        account,
+        points,
+        nickname,
+        lotteryrate,
+        locatelotteryrate,
+        shiyixuanwufanshui,
+        kuaile8fanshui,
+        fucaifanshui,
+        password)        
+        values (${memberid},${account},${points},${nickname},${lotteryrate},${locatelotteryrate},${shiyixuanwufanshui},${kuaile8fanshui},${fucaifanshui},${ password})
+    </insert>
+   
+    <select id="getById" parameterType="Long" resultType="Member" statementType="STATEMENT">
+        select
+        <include refid="selectId" />
+        from  WL_MEMBER_${webname}  where memberId=${memberid}
+    </select>
+  
+    <!-- 更新余额-->
+    <update id="updateBalance" parameterType="Member" statementType="STATEMENT">
+        update  WL_MEMBER_${webname}
+        <set>
+            <if test="balance != nulupdateBalancel">
+                points = points + ${ points },
+            </if>
+        </set>
+        <where>
+          memberId=${memberid}
+        </where>
+    </update>
+   
+    <!--检查用户名重复-->    
+    <select id="checkUsername" resultType="int" parameterType="Member" statementType="STATEMENT">
+        select count(0) from  WL_MEMBER_${webname}
+        <where>
+          account = ${account}
+        </where>
+    </select>
+    
+       <!--检查用户名重复-->    
+    <select id="getByUserName" resultType="Member" parameterType="Member" statementType="STATEMENT">
+        select  
+        <include refid="selectId" />
+        from  WL_MEMBER_${webname}
+        <where>
+          account = ${account}
+        </where>
+    </select>
+    <!--获取最新余额-->
+    <select id="getBalance" resultType="Double" parameterType="Member" statementType="STATEMENT">
+        select points from  WL_MEMBER_${webname}
+        <where>
+            memberId=${memberid}
+        </where>
+    </select>
+   
+   <select id="verifyLogin" parameterType="Member" resultType="Member" statementType="STATEMENT">
+        select
+        <include refid="selectId" />
+        from   WL_MEMBER_${webname}
+        <where>
+            account = ${account} and password = ${password}
+        </where>
+    </select>
+    <!-- 更新密码-->
+    <update id="updatePwd"  parameterType="Member" statementType="STATEMENT">
+        update TB_MEMBER
+        <set>
+            password = ${ password }
+        </set>
+        <where>
+            username = ${username}
+        </where>
+    </update>
+  
+  
+    <!-- 修改登录状态 -->
+    <update id="updateEnable" parameterType="Member" statementType="STATEMENT">
+        update TB_MEMBER
+        <set>
+            enable = ${ enable }
+        </set>
+        <where>
+            id = ${id}
+        </where>
+    </update>
+ 
+
+</mapper>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="stadiumbean">    
+    <sql id="selectId">
+        stadiumID,
+	active,
+	name, 
+	address,	 
+	city,
+	state,
+	zip,
+	country,
+	capacity
+    </sql>   
+ 
+    <insert id="add" parameterType="StadiumBean"  >
+        insert into Stadium ( 
+        stadiumID,
+	active,
+	name, 
+	address,	 
+	city,
+	state,
+	zip,
+	country,
+	capacity)        
+        values (#{stadiumID},#{active},#{name},#{address},#{city},#{state},#{zip},#{country},#{capacity})
+    </insert>
+    <!-- 根据id查询球馆 -->
+    <select id="getById" parameterType="Long" resultType="StadiumBean" >
+        select
+        <include refid="selectId" />
+        from  Stadium  where stadiumID=#{stadiumID}
+    </select>
+  
+  <!-- 列出所有球馆 -->
+    <select id="getAllStadium" resultType="StadiumBean" >
+        select
+        <include refid="selectId" />
+        from  Stadium
+    </select>
+    
+</mapper>

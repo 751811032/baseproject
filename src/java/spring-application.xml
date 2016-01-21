@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task"  
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans  
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd   
+    http://www.springframework.org/schema/context   
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd  
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+    http://www.springframework.org/schema/task 
+    http://www.springframework.org/schema/task/spring-task-3.0.xsd     
+    http://www.springframework.org/schema/aop 
+     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+    <!--  定时器开关  开始-->  
+    <task:annotation-driven/>  
+    <!--  定时器开关  结束-->   
+    <!-- 标注类型 的事务配置 -->
+    <tx:annotation-driven/>
+    <!-- 读取资源文件 -->
+    <!--    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:jdbc.properties" />
+    </bean> 
+    -->
+ 
+    <bean class="com.ct855.util.PropertyConfigurer">
+        <property name="location" value="classpath:jdbc.properties" />
+    </bean> 
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- 数据源驱动类可不写，Druid默认会自动根据URL识别DriverClass -->
+        <property name="driverClassName" value="${driverClassName}" />
+ 
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="${url}" />
+        <property name="username" value="${username}" />
+        <property name="password" value="${password}" />
+ 
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="${initialSize}" />
+        <property name="minIdle" value="${minIdle}" />
+        <property name="maxActive" value="${maxActive}" />
+ 
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="${maxWait}" />
+ 
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+ 
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+ 
+        <property name="validationQuery" value="SELECT 'x' FROM DUAL" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+ 
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小（Oracle使用） -->
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+ 
+        <!-- 配置监控统计拦截的filters 
+        <property name="filters" value="stat" />
+        -->
+    </bean>
+    <bean id="pagePlugin" class="com.ct855.pulgin.mybatis.plugin.PagePlugin">
+        <property name="properties">
+            <props>
+                <prop key="dialect">com.ct855.pulgin.jdbc.dialet.OracleDialect</prop>
+                <prop key="pageSqlId">.*query.*</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:mybatis.xml" />
+        <property name="plugins">
+            <array>
+                <ref bean="pagePlugin" />
+            </array>
+        </property>
+        <property name="mapperLocations">
+            <list>
+                <!-- 自动匹配Mapper映射文件  -->
+                <value>classpath:com/ct855/entity/*-mapper.xml</value>
+            </list>
+        </property>        
+    </bean>
+   
+    <!-- 用自动扫描 就要用mybatis的接口,仓储类接口，这个项目没有用到ｍｙｂｂａｉｔｓ的接口方式所以不要以下扫描
+           否则会出现
+           org.mybatis.spring.mapper.MapperScannerConfigurer$Scanner.main No MyBatis mapper was found in 'com.ct855.dao.impl' package. Please check your configuration.
+           警告
+    -->
+    <!-- 
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.ct855.dao.impl" />
+    </bean> -->
+    <!-- 事务配置 -->
+ 
+   
+    <!-- <bean id="log4jHandlerAOP" class="com.ct855.log.LogController"></bean>
+        <aop:config proxy-target-class="true">
+        <aop:aspect id="logAspect" ref="log4jHandlerAOP">
+            <aop:pointcut id="logPointCut" expression="execution(* com.ct855.dao.impl.*.* (..))" />
+            <aop:around method="logAll" pointcut-ref="logPointCut" />
+        </aop:aspect>
+    </aop:config> -->
+
+    <!-- 使用Spring组件扫描的方式来实现自动注入bean -->
+    <context:component-scan base-package="com.ct855.dao"/>
+    <context:component-scan base-package="com.ct855.service"/>
+    <context:component-scan base-package="com.ct855.security"/>
+    <context:component-scan base-package="com.ct855.task"/>
+    <!-- 隐式地向 Spring 容器注册  -->
+    <context:annotation-config/>
+    <!-- 资源文件绑定器，文件名称：messages.properties（没有找到时的默认文件）， messages_en.properties（英文），messages_zh_CN.properties（中文），等等--> 
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">          
+        <property name="basenames">  
+            <list>  
+                <value>classpath:message-info</value>  
+            </list>  
+        </property>  
+    </bean>
+
+    <!-- 基于Session的本地化解析器 -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <property name="defaultLocale" value="zh_CN"/>
+    </bean>
+    
+    <bean id="wordbook" class="com.paradise.wordbook.Wordbook">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="messageSource" ref="messageSource"/>
+    </bean>
+    <!-- 支持上传文件 -->  
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/> 
+</beans>

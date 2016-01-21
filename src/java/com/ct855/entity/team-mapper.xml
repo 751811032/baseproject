@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="teambean">    
+    <sql id="selectId">
+        teamID,
+	key,
+        active,
+        city,
+        name,
+        stadiumId,
+        conference,
+        division
+    </sql>   
+ 
+    <insert id="add" parameterType="TeamBean"  >
+        insert into Team ( 
+        teamID,
+	key,
+        active,
+        city,
+        name,
+        stadiumId,
+        conference,
+        division)        
+        values (#{teamID},#{key},#{active},#{city},#{name},#{stadiumId},#{conference},#{division})
+    </insert>
+    <!-- 根据id查询队伍 -->
+    <select id="getById" parameterType="Long" resultType="TeamBean" >
+        select
+        <include refid="selectId" />
+        from  Team  where teamId=#{teamId}
+    </select>
+  
+  <!-- 列出所有队伍 -->
+    <select id="getAllTeam" resultType="TeamBean" >
+        select
+        <include refid="selectId" />
+        from  Team
+    </select>
+    <!-- 列出所有东部队伍 -->
+    <select id="getEastTeam" resultType="TeamBean" >
+        select
+        <include refid="selectId" />
+        from  Team where conference = ${"Eastern"}
+    </select>
+    <!-- 列出所有西部队伍 -->
+    <select id="getWestTeam" resultType="TeamBean" >
+        select
+        <include refid="selectId" />
+        from  Team where conference = ${"Western"}
+    </select>
+</mapper>

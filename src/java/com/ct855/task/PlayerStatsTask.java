@@ -1,0 +1,52 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.ct855.task;
+
+import com.alibaba.fastjson.JSON;
+import com.ct855.dao.PlayerStatsDao;
+import com.ct855.entity.PlayerStatsBean;
+import com.ct855.util.HttpsClientUtil;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+/**
+ * @author USER
+ */
+@Component
+public class PlayerStatsTask {
+    @Autowired
+    private PlayerStatsDao playerStatsdao;
+//    @Scheduled(cron = "0/10 * * * * ? ")
+    public void Sych() {
+        try {
+            String result = HttpsClientUtil.getUrl("https://api.fantasydata.net/nba/v2/JSON/PlayerSeasonStats/2016");
+            List<PlayerStatsBean> list = JSON.parseArray(result, PlayerStatsBean.class);
+            System.out.println("--------------------定时任务"+list.size());
+            for (PlayerStatsBean bean : list) {
+                bean.setAverage();
+                System.out.println("--------------------属性"+bean.getAveragePoint());
+                if(playerStatsdao.getById(bean.getStatID())==null){
+                    playerStatsdao.add(bean);
+                }
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+//        try {
+//            String result = HttpsClientUtil.getUrl("https://api.fantasydata.net/nba/v2/JSON/teams");
+//
+//            List<TeamBean> list = JSON.parseArray(result, TeamBean.class);
+//            System.out.println(list.size());
+//        } catch (Exception exception) {
+//            exception.printStackTrace();
+//        }
+    }
+}

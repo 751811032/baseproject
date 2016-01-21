@@ -1,0 +1,2 @@
+配置springmvc的路径为mvc 所以加上mvc路径，后面的就是映射
+http://localhost:8080/BaseProject/mvc/nba/v2/JSON/teamstats

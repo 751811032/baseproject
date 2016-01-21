@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="gamebean">    
+    <sql id="selectId">
+        gameId,
+	season,
+	seasonType, 
+	status,
+	day,
+	dateTime,
+        awayTeam,
+	homeTeam,
+	awayTeamID,
+	homeTeamID,
+	stadiumID,
+	channel,  
+	attendance,  
+	awayTeamScore,
+	homeTeamScore,
+	updated,  
+	quarter,	 
+	timeRemainingMinutes, 
+	timeRemainingSeconds, 
+	pointSpread,  
+	overUnder,    
+	awayTeamMoneyLine,  
+	homeTeamMoneyLine
+    </sql>   
+ 
+    <insert id="add" parameterType="TeamBean"  >
+        insert into Game (
+         gameId,
+	season,
+	seasonType, 
+	status,
+	day,
+	dateTime,
+        awayTeam,
+	homeTeam,
+	awayTeamID,
+	homeTeamID,
+	stadiumID,
+	channel,  
+	attendance,  
+	awayTeamScore,
+	homeTeamScore,
+	updated,  
+	quarter,	 
+	timeRemainingMinutes, 
+	timeRemainingSeconds, 
+	pointSpread,  
+	overUnder,    
+	awayTeamMoneyLine,  
+	homeTeamMoneyLine)        
+        values (#{gameId},#{season},#{seasonType},#{ status},#{day},#{dateTime},#{awayTeam},#{homeTeam},#{awayTeamID},#{homeTeamID},#{stadiumID},
+        #{channel,jdbcType=VARCHAR},#{attendance,jdbcType=VARCHAR},#{awayTeamScore,jdbcType=NUMERIC},
+        #{homeTeamScore,jdbcType=NUMERIC},#{updated},#{quarter,jdbcType=VARCHAR},#{timeRemainingMinutes,jdbcType=VARCHAR},#{timeRemainingSeconds,jdbcType=VARCHAR},#{pointSpread,jdbcType=NUMERIC},#{overUnder,jdbcType=NUMERIC},#{awayTeamMoneyLine,jdbcType=NUMERIC},#{homeTeamMoneyLine,jdbcType=NUMERIC})
+    </insert>
+    <!-- 根据id查询比赛 -->
+    <select id="getById" parameterType="Long" resultType="GameBean" >
+        select
+        <include refid="selectId" />
+        from  Game  where gameId=#{gameId}
+    </select>
+    <!-- 根据id查询比赛 -->
+    <select id="getAllGame" resultType="GameBean" >
+        select
+        <include refid="selectId" />
+        from  Game
+    </select>
+    <!-- 列出该队伍所有比赛 -->
+    <select id="getGameByTeam" parameterType="Long" resultType="GameBean" >
+        select
+        <include refid="selectId" />
+        from  Game where teamId=#{awayTeamID} or teamId =#{homeTeamID}
+    </select>
+    
+    <!-- 列出当天比赛 -->
+    <select id="getGameByDate" parameterType="String" resultType="GameBean" >
+        select
+        <include refid="selectId" />
+        from  Game where day = #{day}
+    </select>
+</mapper>

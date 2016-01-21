@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="betrecords">    
+    <sql id="selectId">
+        memberid,
+        gameid,
+        betlottoid,
+        roundcode,
+        buyid,
+        playkey,
+        bettime,
+        list_id,
+        tuishuitype,
+        gametype,
+        betpoint,
+        commrate,
+        moneymode,
+        note,
+        betcontent,
+        mobile,
+        cancellotto,
+        WinPoinst,
+        ReturnPoinst,
+        betlogid
+    </sql>   
+   
+
+    <insert id="add" parameterType="BetRecords" keyProperty="id" statementType="STATEMENT">
+        insert into WL_BETRECORD_${webname} (
+        memberid,
+        gameid,
+        betlottoid,
+        roundcode,
+        buyid,
+        playkey,
+        bettime,
+        list_id,
+        tuishuitype,
+        gametype,
+        betpoint,
+        commrate,
+        moneymode,
+        note,
+        betcontent,
+        mobile,cancellotto,betlogid)        
+        values (
+        ${memberid},
+        ${gameid},
+        ${betlottoid},
+        ${roundcode},
+        ${buyid},
+        ${playkey},
+        ${bettime},
+        ${list_id},
+        ${tuishuitype},
+        ${gametype},
+        ${betpoint},
+        ${commrate},
+        ${moneymode},
+        ${note},
+        ${betcontent},
+        ${mobile},0,${betlottoid})
+    </insert>
+   
+    <select id="getByBetlottoId" parameterType="BetRecords" resultType="BetRecords" statementType="STATEMENT">
+        select
+        <include refid="selectId" />
+        from  WL_BETRECORD_${webname}   where betlottoid=${betlottoid}
+    </select>
+  
+    <!-- 撤单-->
+    <update id="cancelOrder" parameterType="BetRecords" statementType="STATEMENT">
+        update  WL_BETRECORD_${webname} 
+        <set>
+           cancellotto=${cancellotto}
+        </set>
+        <where>
+          betlottoid=${betlottoid}
+        </where>
+    </update>
+   
+    <!--中奖-->    
+    <update id="winOrder"  parameterType="BetRecords" statementType="STATEMENT">
+         update  WL_BETRECORD_${webname} 
+        <set>
+            WinPoinst =${WinPoinst}
+        </set>
+        <where>
+          betlottoid=${betlottoid}
+        </where>
+    </update>
+    
+    <!--返点-->    
+    <update id="returnPoint"  parameterType="BetRecords" statementType="STATEMENT">
+         update  WL_BETRECORD_${webname} 
+        <set>
+             ReturnPoinst =${ ReturnPoinst}
+        </set>
+        <where>
+          betlottoid=${betlottoid}
+        </where>
+    </update>
+  
+ 
+
+</mapper>
